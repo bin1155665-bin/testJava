@@ -11,25 +11,28 @@ import java.util.concurrent.atomic.AtomicReference;
 public class OrderServiceImpl implements OrderService {
     GoodsService goodsService = new GoodsServiceImpl();
     @Override
-    public Order calculatingMoney(HashMap<Goods, Integer> goodsList, int reachMoney, int reduceMoney) {
+    public Order calculatingMoney(HashMap<String, Integer> goodsList, Boolean saleFlag, Boolean flag) {
         Order order = new Order();
-        order.setGoodsList(goodsList);
 
+        HashMap<Goods,Integer> goods = new HashMap<>();
         AtomicReference<Double> orderMoney = new AtomicReference<>(0d);
-        goodsList.forEach((goods,count)->{
-            Integer price = goodsService.queryGoodsPrice(goods.getName());
+
+        goodsList.forEach((name,count)->{
+            Integer price = goodsService.queryGoodsPrice(name);
+            goods.put(new Goods(name,price),count);
 
             // 草莓 8折
-            if("草莓".equals(goods.getName())){
+            if(saleFlag && "草莓".equals(name)){
                 orderMoney.updateAndGet(v -> v + price * count * 0.8);
+            }else{
+                orderMoney.updateAndGet(v -> v + price * count);
             }
-
-            orderMoney.updateAndGet(v -> v + price * count);
         });
 
         // 满减
-        int n = (int) (orderMoney.get() / reachMoney);
-        order.setOrderMoney(orderMoney.updateAndGet(v -> v - reduceMoney * n));
+        int n = !flag?0:(int) (orderMoney.get() / 100);
+        order.setOrderMoney(orderMoney.updateAndGet(v -> v - 10 * n));
+        order.setGoodsList(goods);
         return order;
     }
 }

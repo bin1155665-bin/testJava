@@ -6,5 +6,5 @@ import com.example.supermarket.entity.Order;
 import java.util.HashMap;
 
 public interface OrderService {
-    Order calculatingMoney(HashMap<Goods,Integer> goods, int reachMoney, int reduceMoney);
+    Order calculatingMoney(HashMap<String,Integer> goods, Boolean saleFlag, Boolean flag);
 }
