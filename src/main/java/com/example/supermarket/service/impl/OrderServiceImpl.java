@@ -22,23 +22,27 @@ public class OrderServiceImpl implements OrderService {
 
         HashMap<Goods,Integer> goods = new HashMap<>();
         AtomicReference<Double> orderMoney = new AtomicReference<>(0d);
+        try{
+            goodsList.forEach((name,count)->{
+                Integer price = goodsService.queryGoodsPrice(name);
+                goods.put(new Goods(name,price),count);
 
-        goodsList.forEach((name,count)->{
-            Integer price = goodsService.queryGoodsPrice(name);
-            goods.put(new Goods(name,price),count);
+                // strawberry 8折
+                if(saleFlag && "strawberry".equals(name)){
+                    orderMoney.updateAndGet(v -> v + price * count * 0.8);
+                }else{
+                    orderMoney.updateAndGet(v -> v + price * count);
+                }
+            });
 
-            // 草莓 8折
-            if(saleFlag && "草莓".equals(name)){
-                orderMoney.updateAndGet(v -> v + price * count * 0.8);
-            }else{
-                orderMoney.updateAndGet(v -> v + price * count);
-            }
-        });
+            // 满减
+            int n = !flag?0:(int) (orderMoney.get() / 100);
+            order.setOrderMoney(orderMoney.updateAndGet(v -> v - 10 * n));
+            order.setGoodsList(goods);
+        }catch (Exception e){
+            return null;
+        }
 
-        // 满减
-        int n = !flag?0:(int) (orderMoney.get() / 100);
-        order.setOrderMoney(orderMoney.updateAndGet(v -> v - 10 * n));
-        order.setGoodsList(goods);
         return order;
     }
 }
