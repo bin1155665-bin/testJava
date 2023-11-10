@@ -75,4 +75,23 @@ public class OrderTest {
 
         System.out.println(order);
     }
+
+
+    /**
+     * 边界值测试
+     * */
+    @Test
+    public void orderE(){
+        HashMap<String,Integer> goodsList = new HashMap<>();
+        goodsList.put("apple",100);
+        goodsList.put("strawberry",100);
+        goodsList.put("mango",10);
+
+        Order order = orderService.calculatingMoney(goodsList,false,true);
+
+        Assertions.assertNotNull(order,"断言失败，订单为空");
+        Assertions.assertEquals(order.getOrderMoney(),2070,"断言失败，应为满100减10");
+
+        System.out.println(order);
+    }
 }

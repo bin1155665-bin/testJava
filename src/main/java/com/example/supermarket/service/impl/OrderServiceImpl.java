@@ -16,6 +16,13 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private GoodsService goodsService;
 
+    /**
+     *
+     * 计算订单
+     * goodsList：商品。件数
+     * saleFlag：是否参与草莓打8折
+     * flag：是否参加满减活动
+     * */
     @Override
     public Order calculatingMoney(HashMap<String, Integer> goodsList, Boolean saleFlag, Boolean flag) {
         Order order = new Order();
@@ -35,11 +42,12 @@ public class OrderServiceImpl implements OrderService {
                 }
             });
 
-            // 满减
+            // 满100就减10
             int n = !flag?0:(int) (orderMoney.get() / 100);
             order.setOrderMoney(orderMoney.updateAndGet(v -> v - 10 * n));
             order.setGoodsList(goods);
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
 
