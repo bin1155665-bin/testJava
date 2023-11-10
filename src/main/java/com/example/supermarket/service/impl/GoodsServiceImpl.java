@@ -2,7 +2,9 @@ package com.example.supermarket.service.impl;
 
 import com.example.supermarket.cons.Constants;
 import com.example.supermarket.service.GoodsService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class GoodsServiceImpl implements GoodsService {
     @Override
     public Integer queryGoodsPrice(String name) {

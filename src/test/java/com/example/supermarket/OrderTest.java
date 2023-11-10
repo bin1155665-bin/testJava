@@ -1,15 +1,21 @@
 package com.example.supermarket;
 
-import com.example.supermarket.entity.Goods;
 import com.example.supermarket.entity.Order;
 import com.example.supermarket.service.OrderService;
-import com.example.supermarket.service.impl.OrderServiceImpl;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 
+@SpringBootTest()
+@RunWith(SpringRunner.class)
 public class OrderTest {
-    OrderService orderService = new OrderServiceImpl();
+    @Resource
+    OrderService orderService;
+
     @Test
     public void orderA(){
         HashMap<String,Integer> goodsList = new HashMap<>();

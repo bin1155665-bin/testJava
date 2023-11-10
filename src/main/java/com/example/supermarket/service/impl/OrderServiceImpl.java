@@ -4,12 +4,18 @@ import com.example.supermarket.entity.Goods;
 import com.example.supermarket.entity.Order;
 import com.example.supermarket.service.GoodsService;
 import com.example.supermarket.service.OrderService;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+
+@Service
 public class OrderServiceImpl implements OrderService {
-    GoodsService goodsService = new GoodsServiceImpl();
+    @Resource
+    private GoodsService goodsService;
+
     @Override
     public Order calculatingMoney(HashMap<String, Integer> goodsList, Boolean saleFlag, Boolean flag) {
         Order order = new Order();
